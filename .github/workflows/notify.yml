@@ -1,0 +1,51 @@
+name: Notify Telegram on new digest
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'docs/d/*.summary.json'
+  workflow_dispatch:
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+      - name: Pick latest summary
+        id: pick
+        run: |
+          file=$(git diff --name-only HEAD~1 HEAD | grep 'docs/d/.*\.summary\.json$' | head -1 || true)
+          if [ -z "$file" ]; then
+            file=$(ls -t docs/d/*.summary.json | head -1)
+          fi
+          echo "file=$file" >> $GITHUB_OUTPUT
+      - name: Wait for Pages
+        run: sleep 90
+      - name: Send to Telegram
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: |
+          set -e
+          file="${{ steps.pick.outputs.file }}"
+          date_ru=$(jq -r .date_ru "$file")
+          summary=$(jq -r .summary "$file")
+          html_url=$(jq -r .html_url "$file")
+          og_url=$(jq -r .og_url "$file")
+          caption=$(printf '📰 <b>Дайджест за %s</b>\n\n%s\n\n🔗 <a href="%s">Читать полностью</a>' "$date_ru" "$summary" "$html_url")
+          resp=$(curl -sS -X POST "https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendPhoto" \
+            -d chat_id="${TELEGRAM_CHAT_ID}" \
+            -d photo="$og_url" \
+            -d parse_mode=HTML \
+            --data-urlencode caption="$caption")
+          if echo "$resp" | grep -q '"ok":true'; then
+            echo "sendPhoto ok"
+          else
+            echo "sendPhoto failed: $resp"
+            curl -sS -X POST "https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage" \
+              -d chat_id="${TELEGRAM_CHAT_ID}" \
+              -d parse_mode=HTML \
+              --data-urlencode text="$caption"
+          fi
