@@ -1,4 +1,4 @@
-name: Notify Telegram on new digest
+name: Notify Telegram on new lessons
 on:
   push:
     branches: [main]
@@ -31,10 +31,12 @@ jobs:
           set -e
           file="${{ steps.pick.outputs.file }}"
           date_ru=$(jq -r .date_ru "$file")
+          theme_ru=$(jq -r .theme_ru "$file")
           summary=$(jq -r .summary "$file")
           html_url=$(jq -r .html_url "$file")
           og_url=$(jq -r .og_url "$file")
-          caption=$(printf '📰 <b>Дайджест за %s</b>\n\n%s\n\n🔗 <a href="%s">Читать полностью</a>' "$date_ru" "$summary" "$html_url")
+          lessons=$(jq -r '.lessons | map("• " + .) | join("\n")' "$file")
+          caption=$(printf '📚 <b>Английский — %s</b>\n%s\n\n%s\n\nСегодня 3 урока по 15 минут:\n%s\n\n🔗 <a href="%s">Открыть уроки</a>' "$theme_ru" "$date_ru" "$summary" "$lessons" "$html_url")
           resp=$(curl -sS -X POST "https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendPhoto" \
             -d chat_id="${TELEGRAM_CHAT_ID}" \
             -d photo="$og_url" \
