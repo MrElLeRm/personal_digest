@@ -492,3 +492,63 @@ details.answers .ru { color: var(--fg-mute); }
   margin-top: 12px;
   letter-spacing: 0.03em;
 }
+
+/* ── Lessons layer v2 — detailed vocab cards & callouts ──────── */
+/* vocab as separate cards */
+.vocab.cards { display: flex; flex-direction: column; gap: 16px; }
+.vocab.cards li {
+  padding: 18px 20px;
+  border: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--bg-elev);
+}
+.vocab.cards .term { font-size: 20px; font-weight: 600; letter-spacing: -0.01em; }
+.vocab.cards .ipa { font-family: var(--mono); font-size: 13px; color: var(--fg-soft); margin-left: 10px; }
+.vocab .pos {
+  font-family: var(--mono); font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--accent); border: 1px solid var(--line); padding: 2px 7px; border-radius: 99px;
+  margin-left: 10px; vertical-align: middle; white-space: nowrap;
+}
+.vocab .tr { display: block; font-size: 16px; font-weight: 600; color: var(--accent); margin: 8px 0 2px; }
+.vocab.cards .ex { display: block; font-style: italic; font-size: 15px; color: var(--fg); margin: 8px 0 2px; }
+.vocab.cards .ru { display: block; font-size: 14px; color: var(--fg-mute); }
+.vocab .why {
+  display: block; font-size: 13px; color: var(--fg-soft); line-height: 1.55;
+  margin-top: 10px; padding-left: 12px; border-left: 2px solid var(--line-strong);
+}
+.vocab .why::before { content: "Когда и почему — "; color: var(--accent); font-weight: 600; }
+.vocab .why b { color: var(--fg-mute); }
+/* phrase "зачем/когда" note */
+.plist .why {
+  display: block; font-size: 13px; color: var(--fg-soft); line-height: 1.5; margin-top: 7px;
+  padding-left: 12px; border-left: 2px solid var(--line-strong);
+}
+.plist .why::before { content: "Зачем и когда — "; color: var(--accent); font-weight: 600; }
+/* "почему/зачем" highlighted block */
+.why-block {
+  font-size: 15px; color: var(--fg-mute); line-height: 1.6;
+  margin: 0 0 8px; padding: 14px 18px;
+  background: var(--bg-soft); border-left: 3px solid var(--accent); border-radius: 0 8px 8px 0;
+}
+.why-block b { color: var(--fg); }
+/* comparison with Russian */
+.cmp { font-size: 15px; line-height: 1.6; color: var(--fg-mute); margin: 0 0 8px; }
+.cmp b { color: var(--fg); }
+.cmp code, .cmp .icode { font-family: var(--mono); font-size: 13px; background: var(--bg-soft); padding: 1px 6px; border-radius: 4px; color: var(--fg); }
+/* mistakes callout */
+.errbox {
+  background: var(--accent-soft); border: 1px solid var(--accent);
+  border-radius: 10px; padding: 18px 22px; margin: 0 0 8px;
+}
+.errbox ul { list-style: none; padding: 0; margin: 8px 0 0; display: flex; flex-direction: column; gap: 14px; }
+.errbox li { font-size: 15px; }
+.errbox .wrong { color: #d9806f; }
+.errbox .wrong::before { content: "✗ "; }
+.errbox .right { color: var(--fg); font-weight: 600; }
+.errbox .right::before { content: "✓ "; color: var(--accent); }
+.errbox .arrow { color: var(--fg-soft); margin: 0 6px; }
+.errbox .ru { display: block; font-size: 13px; color: var(--fg-mute); margin-top: 5px; }
+/* per-example note (why this form) */
+.plist .note { display: block; font-size: 12.5px; color: var(--fg-soft); font-style: italic; margin-top: 6px; }
+[data-theme="light"] .errbox .wrong { color: #b8442f; }
