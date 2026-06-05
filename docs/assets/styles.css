@@ -418,6 +418,27 @@ footer.foot a:hover { color: var(--accent); }
   border-radius: 4px;
   color: var(--fg);
 }
+.gram-table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 4px 0 14px;
+  font-size: 14.5px;
+}
+.gram-table th, .gram-table td {
+  text-align: left;
+  padding: 8px 12px;
+  border: 1px solid var(--line);
+  vertical-align: top;
+}
+.gram-table th {
+  background: var(--bg-soft);
+  color: var(--fg-mute);
+  font-weight: 600;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.gram-table td:first-child { color: var(--fg-mute); white-space: nowrap; }
 /* task box */
 .task {
   background: var(--bg-soft);
